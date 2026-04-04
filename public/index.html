@@ -3,99 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>市场监控仪表盘</title>
+    <title>A股实时监控仪表盘</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Microsoft YaHei', sans-serif; }
-        body { background: #0F172A; color: #fff; padding: 2rem; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .title { text-align: center; font-size: 28px; color: #00E0FF; margin: 0 0 2rem; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-        .card { background: #1E293B; padding: 2rem; border-radius: 16px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .card h3 { color: #FF9500; margin-bottom: 1rem; font-size: 18px; }
-        .price { font-size: 26px; font-weight: bold; }
-        .red { color: #FF4747; }
-        .green { color: #00D862; }
-        .news { background: #1E293B; padding: 2rem; border-radius: 16px; }
-        .news h3 { color: #FF9500; margin-bottom: 1rem; }
-        .news-list { list-style: none; max-height: 500px; overflow-y: auto; }
-        .news-list li { padding: 12px; border-bottom: 1px solid #334155; line-height: 1.6; }
-        .news-list span { color: #94A3B8; font-size: 12px; margin-left: 8px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #fff;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #4cc9f0;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header h1::before {
+            content: "📊";
+        }
+
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .index-card {
+            background-color: #1e1e2e;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .index-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .index-name {
+            color: #f77f00;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .index-content {
+            font-size: 24px;
+            font-weight: bold;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .loading-text {
+            color: #aaa;
+        }
+
+        .error-text {
+            color: #ef4444;
+        }
+
+        .value {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .change {
+            font-size: 16px;
+        }
+
+        .up {
+            color: #ef4444;
+        }
+
+        .down {
+            color: #22c55e;
+        }
+
+        .news-section {
+            background-color: #1e1e2e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .news-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f77f00;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .news-header::before {
+            content: "📰";
+        }
+
+        #news-list {
+            list-style: none;
+        }
+
+        #news-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        #news-list li:last-child {
+            border-bottom: none;
+        }
+
+        #news-list a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #news-list a:hover {
+            color: #4cc9f0;
+        }
+
+        .news-title {
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .news-time {
+            font-size: 13px;
+            color: #aaa;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">📊 A股实时监控仪表盘</h1>
-        <div class="grid">
-            <div class="card">
-                <h3>上证指数</h3>
-                <div id="sh" class="price">加载中...</div>
-            </div>
-            <div class="card">
-                <h3>深证成指</h3>
-                <div id="sz" class="price">加载中...</div>
-            </div>
-            <div class="card">
-                <h3>北向资金</h3>
-                <div id="north" class="price">加载中...</div>
+    <div class="header">
+        <h1>A股实时监控仪表盘</h1>
+    </div>
+
+    <div class="index-grid">
+        <div class="index-card">
+            <div class="index-name">上证指数</div>
+            <div class="index-content" id="sh-index">
+                <div class="loading-text">加载中...</div>
             </div>
         </div>
-        <div class="news">
-            <h3>📰 财联社24小时电报</h3>
-            <ul id="newsList" class="news-list"></ul>
+
+        <div class="index-card">
+            <div class="index-name">深证成指</div>
+            <div class="index-content" id="sz-index">
+                <div class="loading-text">加载中...</div>
+            </div>
+        </div>
+
+        <div class="index-card">
+            <div class="index-name">北向资金</div>
+            <div class="index-content" id="northbound">
+                <div class="loading-text">加载中...</div>
+            </div>
         </div>
     </div>
 
-<script>
-const API = "/api";
+    <div class="news-section">
+        <div class="news-header">财联社24小时电报</div>
+        <ul id="news-list">
+            <li class="loading-text">加载中...</li>
+        </ul>
+    </div>
 
-// 加载行情数据
-async function loadData(elem, url) {
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-        const el = document.getElementById(elem);
-        
-        if (elem === "north") {
-            const fund = data.data.list.find(item => item.f1 === "北向资金");
-            const value = (fund.f2 / 10000).toFixed(2);
-            el.innerHTML = `<span class="${value >= 0 ? 'green' : 'red'}">${value}亿</span>`;
-        } else {
-            const { f43, f44, f45 } = data.data;
-            el.innerHTML = `${f43.toFixed(2)} <span class="${f44 >= 0 ? 'red' : 'green'}">${f44.toFixed(2)} (${f45.toFixed(2)}%)</span>`;
+    <script>
+        // 加载指数数据
+        async function loadData() {
+            try {
+                const response = await fetch('/api/index');
+                if (!response.ok) throw new Error('请求失败');
+                const data = await response.json();
+
+                // 更新上证指数
+                const shEl = document.getElementById('sh-index');
+                if (shEl) {
+                    shEl.innerHTML = `
+                        <div class="value">${data.sh.value}</div>
+                        <div class="change ${data.sh.change >= 0 ? 'up' : 'down'}">
+                            ${data.sh.change} (${data.sh.percent}%)
+                        </div>
+                    `;
+                }
+
+                // 更新深证成指
+                const szEl = document.getElementById('sz-index');
+                if (szEl) {
+                    szEl.innerHTML = `
+                        <div class="value">${data.sz.value}</div>
+                        <div class="change ${data.sz.change >= 0 ? 'up' : 'down'}">
+                            ${data.sz.change} (${data.sz.percent}%)
+                        </div>
+                    `;
+                }
+
+                // 更新北向资金
+                const northEl = document.getElementById('northbound');
+                if (northEl) {
+                    northEl.innerHTML = `
+                        <div class="value">${data.northbound}亿</div>
+                        <div class="change ${data.northboundChange >= 0 ? 'up' : 'down'}">
+                            ${data.northboundChange}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                // 显示错误信息
+                const shEl = document.getElementById('sh-index');
+                const szEl = document.getElementById('sz-index');
+                const northEl = document.getElementById('northbound');
+                if (shEl) shEl.innerHTML = '<div class="error-text">加载失败</div>';
+                if (szEl) szEl.innerHTML = '<div class="error-text">加载失败</div>';
+                if (northEl) northEl.innerHTML = '<div class="error-text">加载失败</div>';
+            }
         }
-    } catch (e) { el.innerHTML = "加载成功"; }
-}
 
-// 加载新闻
-async function loadNews() {
-    try {
-        const res = await fetch(`${API}/news`);
-        const data = await res.json();
-        const list = document.getElementById("newsList");
-        list.innerHTML = "";
-        
-        data.data.telegram.slice(0, 30).forEach(item => {
-            const time = new Date(item.time * 1000).toLocaleTimeString();
-            list.innerHTML += `<li>${item.title}<span>${time}</span></li>`;
+        // 加载新闻
+        async function loadNews() {
+            try {
+                const response = await fetch('/api/news');
+                if (!response.ok) throw new Error('请求失败');
+                const news = await response.json();
+
+                const list = document.getElementById('news-list');
+                if (!list) return;
+
+                list.innerHTML = '';
+                news.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <a href="${item.url}" target="_blank">
+                            <span class="news-title">${item.title}</span>
+                            <span class="news-time">${item.time}</span>
+                        </a>
+                    `;
+                    list.appendChild(li);
+                });
+            } catch (error) {
+                console.error('加载新闻失败:', error);
+                const list = document.getElementById('news-list');
+                if (list) {
+                    list.innerHTML = '<li class="error-text">加载失败</li>';
+                }
+            }
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            loadNews();
+            // 每30秒自动刷新数据
+            setInterval(loadData, 30000);
         });
-    } catch (e) { list.innerHTML = "<li>新闻加载成功</li>"; }
-}
-
-// 初始化 + 自动刷新
-async function init() {
-    loadData("sh", `${API}/sh`);
-    loadData("sz", `${API}/sz`);
-    loadData("north", `${API}/north`);
-    loadNews();
-    
-    // 30秒刷新行情，1分钟刷新新闻
-    setInterval(() => loadData("sh", `${API}/sh`), 30000);
-    setInterval(() => loadData("sz", `${API}/sz`), 30000);
-    setInterval(() => loadData("north", `${API}/north`), 30000);
-    setInterval(loadNews, 60000);
-}
-
-window.onload = init;
-</script>
+    </script>
 </body>
 </html>
