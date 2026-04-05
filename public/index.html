@@ -5,137 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A股实时监控仪表盘</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
-        body {
-            background-color: #0f172a;
-            color: #fff;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            color: #00e5ff;
-            font-size: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .index-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .index-card {
-            background-color: #1e293b;
-            border-radius: 12px;
-            padding: 25px 20px;
-            text-align: center;
-        }
-        .index-name {
-            color: #ff9500;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .index-content {
-            font-size: 24px;
-            font-weight: bold;
-            min-height: 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .loading-text {
-            color: #94a3b8;
-            font-size: 24px;
-        }
-        .error-text {
-            color: #ef4444;
-            font-size: 16px;
-        }
-        .value {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", sans-serif; }
+        body { background-color: #0f172a; color: #fff; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #00e5ff; font-size: 28px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .index-card { background-color: #1e293b; border-radius: 12px; padding: 25px 20px; text-align: center; }
+        .index-name { color: #ff9500; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+        .index-content { font-size: 24px; font-weight: bold; min-height: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .loading-text { color: #94a3b8; font-size: 24px; }
+        .error-text { color: #ef4444; font-size: 16px; }
+        .value { font-size: 28px; margin-bottom: 8px; }
         .up { color: #ef4444; }
         .down { color: #22c55e; }
-
-        /* 新闻区域样式 */
-        .news-section {
-            background-color: #1e293b;
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .news-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ff9500;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
+        .news-section { background-color: #1e293b; border-radius: 12px; padding: 20px; }
+        .news-header { display: flex; align-items: center; gap: 10px; color: #ff9500; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
         .news-header::before { content: "📰"; }
-        #news-list {
-            list-style: none;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        #news-list li {
-            padding: 12px 15px;
-            border-bottom: 1px solid #334155;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-        #news-list li:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        /* 重要新闻标红样式 */
-        #news-list li.important {
-            background-color: rgba(239, 68, 68, 0.15);
-            border-left: 4px solid #ef4444;
-        }
-        #news-list a {
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #news-list li.important .news-title {
-            color: #ef4444;
-            font-weight: bold;
-        }
-        .news-title {
-            font-size: 15px;
-            line-height: 1.4;
-        }
-        .news-time {
-            font-size: 13px;
-            color: #94a3b8;
-            white-space: nowrap;
-            margin-left: 10px;
-        }
-        .important-tag {
-            background-color: #ef4444;
-            color: white;
-            font-size: 12px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 8px;
-        }
+        #news-list { list-style: none; max-height: 500px; overflow-y: auto; }
+        #news-list li { padding: 12px 15px; border-bottom: 1px solid #334155; border-radius: 8px; margin-bottom: 8px; }
+        #news-list li:last-child { border-bottom: none; margin-bottom: 0; }
+        #news-list li.important { background-color: rgba(239, 68, 68, 0.15); border-left: 4px solid #ef4444; }
+        #news-list a { color: #fff; text-decoration: none; display: flex; justify-content: space-between; align-items: center; }
+        #news-list li.important .news-title { color: #ef4444; font-weight: bold; }
+        .news-title { font-size: 15px; line-height: 1.4; }
+        .news-time { font-size: 13px; color: #94a3b8; white-space: nowrap; margin-left: 10px; }
+        .important-tag { background-color: #ef4444; color: white; font-size: 12px; padding: 2px 6px; border-radius: 4px; margin-right: 8px; }
     </style>
 </head>
 <body>
@@ -143,7 +37,6 @@
         <h1>📊 A股实时监控仪表盘</h1>
     </div>
 
-    <!-- 指数卡片区域 -->
     <div class="index-grid">
         <div class="index-card">
             <div class="index-name">上证指数</div>
@@ -165,7 +58,6 @@
         </div>
     </div>
 
-    <!-- 新闻区域 -->
     <div class="news-section">
         <div class="news-header">财联社24小时电报</div>
         <ul id="news-list">
@@ -174,26 +66,21 @@
     </div>
 
     <script>
-        // 加载指数数据 - 所有变量提前声明，绝对无未定义错误
         async function loadData() {
             try {
-                // 1. 先获取所有DOM元素，提前声明变量
                 const shEl = document.getElementById("sh-index");
                 const szEl = document.getElementById("sz-index");
                 const northEl = document.getElementById("northbound");
 
-                // 2. 请求API
                 const response = await fetch('/api/index');
                 if (!response.ok) throw new Error("API请求失败");
                 const data = await response.json();
 
-                // 3. 容错处理，避免空值报错
                 const shData = data.sh || { value: "--", change: 0, percent: 0 };
                 const szData = data.sz || { value: "--", change: 0, percent: 0 };
                 const northValue = data.northbound || "0";
                 const northChange = data.northboundChange || "0";
 
-                // 4. 更新页面内容
                 if (shEl) {
                     shEl.innerHTML = `
                         <div class="value">${shData.value}</div>
@@ -220,7 +107,6 @@
                 }
             } catch (error) {
                 console.error("指数数据加载失败:", error);
-                // 出错时显示提示，不会卡死
                 const shEl = document.getElementById("sh-index");
                 const szEl = document.getElementById("sz-index");
                 const northEl = document.getElementById("northbound");
@@ -230,22 +116,16 @@
             }
         }
 
-        // 加载新闻数据 - 所有变量提前声明，绝对无未定义错误
         async function loadNews() {
             try {
-                // 1. 提前获取DOM元素，声明变量
                 const listEl = document.getElementById("news-list");
                 if (!listEl) return;
 
-                // 2. 请求API
                 const response = await fetch('/api/news');
                 if (!response.ok) throw new Error("新闻API请求失败");
                 const newsList = await response.json();
 
-                // 3. 清空原有内容
                 listEl.innerHTML = "";
-
-                // 4. 遍历渲染新闻
                 if (newsList.length === 0) {
                     listEl.innerHTML = '<li class="loading-text">暂无当日新闻</li>';
                     return;
@@ -253,17 +133,14 @@
 
                 newsList.forEach(item => {
                     const li = document.createElement("li");
-                    // 判断是否是重要新闻
                     const isImportant = item.important === true || item.title.includes("加红") || item.title.includes("重磅");
                     
-                    // 处理标题
                     let titleHtml = item.title.replace("【加红】", "").replace("[加红]", "");
                     if (isImportant) {
                         li.className = "important";
                         titleHtml = `<span class="important-tag">重要</span>${titleHtml}`;
                     }
 
-                    // 渲染内容
                     li.innerHTML = `
                         <a href="${item.url || '#'}" target="_blank">
                             <span class="news-title">${titleHtml}</span>
@@ -279,11 +156,9 @@
             }
         }
 
-        // 页面加载完成后执行
         document.addEventListener("DOMContentLoaded", () => {
             loadData();
             loadNews();
-            // 每30秒自动刷新一次数据
             setInterval(() => {
                 loadData();
                 loadNews();
