@@ -1,9 +1,10 @@
 import json
 from datetime import datetime
 
+# handler必须顶格写，在文件最顶层
 def handler(event, context):
     today = datetime.now().strftime("%Y-%m-%d")
-    test_news = [
+    news_list = [
         {
             "title": "【加红】测试重要新闻",
             "time": f"{today} 10:00",
@@ -24,5 +25,5 @@ def handler(event, context):
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"
         },
-        "body": json.dumps(test_news, ensure_ascii=False)
+        "body": json.dumps(news_list, ensure_ascii=False)
     }

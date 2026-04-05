@@ -1,8 +1,9 @@
 import json
 
+# handler必须在文件最顶层，顶格书写，不能嵌套
 def handler(event, context):
-    # 固定测试数据，保证函数绝对合规、不会崩溃
-    test_data = {
+    # 固定测试数据，无任何语法错误，100%能被Vercel识别
+    response_data = {
         "sh": {
             "value": "3000.00",
             "change": "+10.00",
@@ -23,5 +24,5 @@ def handler(event, context):
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"
         },
-        "body": json.dumps(test_data, ensure_ascii=False)
+        "body": json.dumps(response_data, ensure_ascii=False)
     }
