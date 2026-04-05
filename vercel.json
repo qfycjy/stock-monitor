@@ -1,6 +1,14 @@
 {
   "routes": [
     {
+      "src": "/api/index",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/api/news",
+      "dest": "/api/news.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "/public/$1"
     }
