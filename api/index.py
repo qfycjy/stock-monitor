@@ -1,7 +1,7 @@
 import json
 
 def handler(event, context):
-    # 先返回固定测试数据，保证函数绝对不崩溃
+    # 固定测试数据，保证函数绝对合规、不会崩溃
     test_data = {
         "sh": {
             "value": "3000.00",
