@@ -1,0 +1,8 @@
+[project]
+name = "stock-monitor"
+version = "0.1.0"
+description = "A股实时监控仪表盘"
+requires-python = ">=3.10"
+dependencies = [
+  "requests>=2.31.0",
+]
