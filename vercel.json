@@ -1,10 +1,17 @@
 {
-  "builds": [
-    { "src": "api/index.py", "use": "@vercel/python" },
-    { "src": "public/**", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "api/index.py" },
-    { "src": "/(.*)", "dest": "public/index.html" }
+  "functions": {
+    "API/*.py": {
+      "runtime": "@vercel/python@3.10"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/index",
+      "destination": "/API/index.py"
+    },
+    {
+      "source": "/api/news",
+      "destination": "/API/news.py"
+    }
   ]
 }
