@@ -1,17 +1,8 @@
 {
-  "functions": {
-    "API/*.py": {
-      "runtime": "@vercel/python@3.10"
-    }
-  },
   "rewrites": [
     {
-      "source": "/api/index",
-      "destination": "/API/index.py"
-    },
-    {
-      "source": "/api/news",
-      "destination": "/API/news.py"
+      "source": "/api/:path*",
+      "destination": "/api/:path*.py"
     }
   ]
 }
