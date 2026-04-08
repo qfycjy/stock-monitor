@@ -4,5 +4,8 @@
       "source": "/api/:path*",
       "destination": "/api/:path*.py"
     }
-  ]
+  ],
+  "static": {
+    "directory": "public"
+  }
 }
