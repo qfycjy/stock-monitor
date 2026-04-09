@@ -1,4 +1,10 @@
 {
+  "builds": [
+    {
+      "src": "API/*.py",
+      "use": "@vercel/python"
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
