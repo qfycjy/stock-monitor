@@ -1,14 +1,14 @@
 import json
 import requests
 
-# Vercel 必须的顶级入口函数，名字绝对不能改
+# Vercel 强制要求：必须有这个顶级 handler 函数，名字不能改
 def handler(request, context):
     HEADERS = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
         "Referer": "https://quote.eastmoney.com/"
     }
 
-    # 兜底数据，接口失败也返回正常格式
+    # 兜底数据，接口失败也返回正常格式，前端不会报错
     final_data = {
         "sh": {"value": "3000.00", "change": "+10.00", "percent": "+0.33%"},
         "sz": {"value": "10000.00", "change": "-20.00", "percent": "-0.20%"},
@@ -61,6 +61,7 @@ def handler(request, context):
     except Exception as e:
         print("north error:", e)
 
+    # Vercel 强制要求：必须返回这个标准格式
     return {
         "statusCode": 200,
         "headers": {
